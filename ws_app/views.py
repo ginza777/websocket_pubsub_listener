@@ -15,7 +15,7 @@ import redis
 class MessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['text']
+        fields = ['text','channel']
 
 
 class MessageCreateView(generics.CreateAPIView):
@@ -24,6 +24,7 @@ class MessageCreateView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         message_text = request.data['text']
+        channel = request.data['channel']
         print(message_text)
 
         # Create the message in the database
@@ -32,7 +33,7 @@ class MessageCreateView(generics.CreateAPIView):
         # Publish the message to the 'events' Redis channel
         r = redis.Redis(host='localhost', port=6379, db=0)
         payload = json.dumps({'message': message.text})
-        r.publish('events', payload)
+        r.publish(f'{channel}', payload)
 
         # Send the message to connected WebSocket clients
 

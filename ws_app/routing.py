@@ -5,5 +5,5 @@ from .consumers import WsPubsubConsumer  # Make sure you import your consumer
 
 
 websocket_urlpatterns = [
-    re_path(r'ws/$', WsPubsubConsumer.as_asgi()),
+    re_path(r'ws/(?P<channel>\w+)/$', WsPubsubConsumer.as_asgi()),
 ]

@@ -21,11 +21,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class WsPubsubConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        channel=self.scope['url_route']['kwargs']['channel']
         await self.accept()
         print('WebSocket connected')
         self.redis = await aioredis.from_url("redis://127.0.0.1:6379/0")
         self.pubsub = self.redis.pubsub()
-        await self.pubsub.subscribe("events")
+        await self.pubsub.subscribe(channel)
 
         while True:
             message = await self.pubsub.get_message()

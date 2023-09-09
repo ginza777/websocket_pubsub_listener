@@ -5,4 +5,4 @@ from .models import Message
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ['text']
+    list_display = ['text','channel']
