@@ -1,5 +1,6 @@
 import json
-
+import datetime
+from datetime import datetime, timedelta
 from django.core.cache.backends import redis
 from django.shortcuts import render
 from rest_framework import generics
@@ -33,7 +34,9 @@ class MessageCreateView(generics.CreateAPIView):
         # Publish the message to the 'events' Redis channel
         r = redis.Redis(host='localhost', port=6379, db=0)
         payload = json.dumps({'message': message.text})
-        r.publish(f'{channel}', payload)
+        key = f'event_payload_{datetime.now() + timedelta(days=1)}'  # Set TTL for 1 day
+        r.publish(channel, payload)
+
 
         # Send the message to connected WebSocket clients
 
