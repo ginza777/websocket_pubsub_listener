@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from ws_app.views import MessageCreateView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', MessageCreateView.as_view(), name='message-create')
 ]

@@ -1,34 +1,48 @@
+# consumers.py
+import time
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+import aioredis
 
-class CalculatorConsumer(AsyncWebsocketConsumer):
+
+# def message():
+#     redis = aioredis.from_url("redis://127.0.0.1:6379/0")
+#     pubsub = redis.pubsub()
+#     await pubsub.subscribe("events")
+#     async for message in pubsub.listen():
+#         print('socket: ', message)
+#         if message['type'] != 'message':
+#             print('socket: ', message)
+
+import redis
+import aioredis
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+class WsPubsubConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
+        print('WebSocket connected')
+        self.redis = await aioredis.from_url("redis://127.0.0.1:6379/0")
+        self.pubsub = self.redis.pubsub()
+        await self.pubsub.subscribe("events")
 
-    async def receive(self, text_data):
-        print(text_data)
-        text_data_json = json.loads(text_data)
-        print(text_data_json)
+        while True:
+            message = await self.pubsub.get_message()
+            if message is not None:
+                message=str(message['data'])
+                await self.send(message)
 
-        operation = text_data_json['operation']
 
-        if operation == "add":
-            num1 = text_data_json['num1']
-            num2 = text_data_json['num2']
-            result = num1 + num2
 
-            await self.send(text_data=json.dumps({
-                'result': result
-            }))
-        elif operation == "subtract":
-            num1 = text_data_json['num1']
-            num2 = text_data_json['num2']
-            result = num1 - num2
 
-            await self.send(text_data=json.dumps({
-                'result': result
-            }))
-        else:
-            await self.send(text_data=json.dumps({
-                'error': 'Invalid operation'
-            }))
+
+
+
+
+
+
+
+
+
+
