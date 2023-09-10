@@ -1,20 +1,40 @@
 # websocket_pubsub_listener# 
-# Django WebSocket Ishga Tushirish
+# Django WebSocket Integration
 
-Bu proyekt Django ilovasini WebSocket protokolini ishlatish uchun qanday sozlashni ko'rsatadi.
+This project demonstrates how to set up a Django application to work with WebSocket protocol.
 
-## Ishga Tushirish
+## Getting Started
 
-Proyektni o'rnating:
+Clone the project:
 
 ```bash
-git clone https://github.com/sizning-hisobingiz/lokal-repo.git
-cd lokal-repo
+git clone https://github.com/Sherzamon/websocket_pubsub_listener.git
+```bash
+cd websocket_pubsub_listener
+Set up a virtual environment and install Django:
+```bash
 python -m venv venv
+```bash
 source venv/bin/activate
+```bash
 pip install -r requirements.txt
+Apply migrations and set up the database:
+```bash
 python manage.py makemigrations
+```bash
 python manage.py migrate
+Start the server:
+```bash
 python manage.py runserver
-curl -X POST http://localhost:8000/api/create-message/ -d "channel=my_channel&text=Salom, dunyo!"
+
+Creating a Channel and Text on localhost
+
+```bash
+curl -X POST http://localhost:8000/ -d "channel=my_channel&text=Salom, dunyo!"
+WebSocket Communication
+Open a WebSocket connection:
+
+bash
+
+```bash
 ws://localhost:8000/ws/my_channel/
