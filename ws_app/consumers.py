@@ -27,12 +27,18 @@ class WsPubsubConsumer(AsyncWebsocketConsumer):
         self.redis = await aioredis.from_url("redis://127.0.0.1:6379/0")
         self.pubsub = self.redis.pubsub()
         await self.pubsub.subscribe(channel)
-
-        while True:
-            message = await self.pubsub.get_message()
+        async for message in self.pubsub.listen():
+            print('socket: ', message)
+            # message = await self.pubsub.get_message()
             if message is not None:
                 message=str(message['data'])
                 await self.send(message)
+
+        # while True:
+        #     message = await self.pubsub.get_message()
+        #     if message is not None:
+        #         message=str(message['data'])
+        #         await self.send(message)
 
 
 

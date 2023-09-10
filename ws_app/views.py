@@ -26,15 +26,13 @@ class MessageCreateView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         message_text = request.data['text']
         channel = request.data['channel']
-        print(message_text)
+
 
         # Create the message in the database
         message = Message.objects.create(text=message_text)
-
         # Publish the message to the 'events' Redis channel
         r = redis.Redis(host='localhost', port=6379, db=0)
         payload = json.dumps({'message': message.text})
-        key = f'event_payload_{datetime.now() + timedelta(days=1)}'  # Set TTL for 1 day
         r.publish(channel, payload)
 
 
