@@ -11,6 +11,7 @@ Clone the project:
 git clone https://github.com/Sherzamon/websocket_pubsub_listener.git
 ```bash
 cd websocket_pubsub_listener
+```
 Set up a virtual environment and install Django:
 ```bash
 python -m venv venv
